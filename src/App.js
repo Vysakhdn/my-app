@@ -44,7 +44,7 @@ function App() {
   };
 
   const auto = () => {
-    setautomatic((prevAutoMode) => !prevAutoMode);
+    setautomatic((prevautomatic) => !prevautomatic);
   };
 
   return (
