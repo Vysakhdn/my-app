@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-const TRAFFIC_LIGHT_STATES = {
+const trafficlight = {
   STOP: 'stop',
   READY: 'ready',
   GO: 'go'
 };
 
 function App() {
-  const [currentLight, setCurrentLight] = useState(TRAFFIC_LIGHT_STATES.STOP);
-  const [isAutoMode, setIsAutoMode] = useState(false);
+  const [current, setcurrent] = useState(trafficlight.STOP);
+  const [automatic, setautomatic] = useState(false);
 
   useEffect(() => {
     let intervalId;
 
-    if (isAutoMode) {
+    if (automatic) {
       intervalId = setInterval(() => {
-        setCurrentLight((prevLight) => {
+        setcurrent((prevLight) => {
           switch (prevLight) {
-            case TRAFFIC_LIGHT_STATES.STOP:
-              return TRAFFIC_LIGHT_STATES.READY;
-            case TRAFFIC_LIGHT_STATES.READY:
-              return TRAFFIC_LIGHT_STATES.GO;
-            case TRAFFIC_LIGHT_STATES.GO:
-              return TRAFFIC_LIGHT_STATES.STOP;
+            case trafficlight.STOP:
+              return trafficlight.READY;
+            case trafficlight.READY:
+              return trafficlight.GO;
+            case trafficlight.GO:
+              return trafficlight.STOP;
             default:
               return prevLight;
           }
         });
-      }, 10000); // Change light every 10 seconds in auto mode
+      }, 2000); 
     } else {
       clearInterval(intervalId);
     }
@@ -36,29 +36,29 @@ function App() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [isAutoMode]);
+  }, [automatic]);
 
-  const handleManualChange = (light) => {
-    setCurrentLight(light);
-    setIsAutoMode(false);
+  const manual = (light) => {
+    setcurrent(light);
+    setautomatic(false);
   };
 
-  const handleAutoModeToggle = () => {
-    setIsAutoMode((prevAutoMode) => !prevAutoMode);
+  const auto = () => {
+    setautomatic((prevAutoMode) => !prevAutoMode);
   };
 
   return (
     <div className="App">
-      <div className={`traffic-light ${currentLight} ${isAutoMode ? 'blinking' : ''}`}>
-        <div className="light red"></div>
-        <div className="light yellow"></div>
-        <div className="light green"></div>
+      <div className={`traffic-light ${current} ${automatic ? 'blinking' : ''}`}>
+        <div className={`light  ${current===trafficlight.STOP ? 'red' : ''}`}></div>
+        <div className={`light  ${current===trafficlight.READY ? 'yellow' : ''}`}></div>
+        <div className={`light  ${current===trafficlight.GO ? 'green' : ''}`}></div>
       </div>
       <div className="buttons">
-        <button onClick={() => handleManualChange(TRAFFIC_LIGHT_STATES.STOP)}>Stop</button>
-        <button onClick={() => handleManualChange(TRAFFIC_LIGHT_STATES.READY)}>Ready</button>
-        <button onClick={() => handleManualChange(TRAFFIC_LIGHT_STATES.GO)}>Go</button>
-        <button onClick={handleAutoModeToggle}>Auto</button>
+        <button onClick={() => manual(trafficlight.STOP)}>Stop</button>
+        <button onClick={() => manual(trafficlight.READY)}>Ready</button>
+        <button onClick={() => manual(trafficlight.GO)}>Go</button>
+        <button onClick={auto}>Auto</button>
       </div>
     </div>
   );
